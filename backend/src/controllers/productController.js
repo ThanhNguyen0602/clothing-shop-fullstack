@@ -1,9 +1,14 @@
 const service = require("../services/productService");
+const productSearch = require("../services/productSearchService");
 const { productBody, statusBody } = require("../utils/catalogValidation");
 const { parseId } = require("../utils/catalogHelpers");
+const { parseProductQuery } = require("../utils/productQuery");
 
 const listPublic = async (req, res) => {
-  res.json({ success: true, data: await service.listPublic() });
+  const query = parseProductQuery(req.query);
+  const result = await productSearch.search(query);
+
+  res.json({ success: true, ...result });
 };
 
 const listManagement = async (req, res) => {

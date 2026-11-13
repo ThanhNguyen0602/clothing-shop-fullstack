@@ -93,7 +93,7 @@ const categoryBody = (body) => {
 };
 
 const productBody = (body) => {
-  const fields = ["category_id", "sku", "name", "slug",
+  const fields = ["category_id", "brand_id", "sku", "name", "slug",
     "short_description", "description", "original_price", "sale_price",
     "stock_quantity", "status", "images"];
 
@@ -111,6 +111,15 @@ const productBody = (body) => {
   const images = body.images.map((item) => url(item, "images"));
   if (new Set(images).size !== images.length) fail(400, "URL ảnh bị trùng");
 
+  const brandId = body.brand_id === undefined || body.brand_id === null
+    ? null : body.brand_id;
+
+  if (brandId !== null && typeof brandId !== "number") {
+    fail(400, "brand_id phải là number hoặc null");
+  }
+
+  if (brandId !== null) parseId(brandId);
+
   const original = money(body.original_price, "original_price");
   const sale = money(body.sale_price, "sale_price");
 
@@ -120,6 +129,7 @@ const productBody = (body) => {
 
   return {
     category_id: parseId(body.category_id),
+    brand_id: brandId,
     sku: text(body.sku, 50, "sku"), name: text(body.name, 255, "name"),
     slug: slug(body.slug, 255),
     short_description: text(body.short_description, 500,
