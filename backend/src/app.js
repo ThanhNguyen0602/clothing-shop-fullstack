@@ -1,12 +1,13 @@
-const categoryRoutes = require("./routes/categoryRoutes");
-const productRoutes = require("./routes/productRoutes");
-const managementRoutes = require("./routes/managementRoutes");
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const productRoutes = require("./routes/productRoutes");
+const managementRoutes = require("./routes/managementRoutes");
+const brandRoutes = require("./routes/brandRoutes");
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/brands", brandRoutes);
 app.use("/api/management", managementRoutes);
 
 app.use((req, res) => {

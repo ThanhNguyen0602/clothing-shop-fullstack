@@ -1,4 +1,5 @@
 const categories = require("../models/categoryModel");
+const brands = require("../models/brandModel");
 const products = require("../models/productModel");
 const withTransaction = require("../utils/withTransaction");
 const { fail } = require("../utils/catalogHelpers");
@@ -22,6 +23,14 @@ const save = async (data, id = null) => withTransaction(async (db) => {
 
   if (!await categories.find(data.category_id, db)) {
     fail(400, "Danh mục không tồn tại");
+  }
+
+  if (data.brand_id !== null && data.brand_id !== undefined) {
+    const brand = await brands.find(data.brand_id, db);
+
+    if (!brand || brand.status !== "ACTIVE") {
+      fail(400, "Thương hiệu không tồn tại hoặc không hoạt động");
+    }
   }
 
   const productId = id ?? await products.insert(data, db);

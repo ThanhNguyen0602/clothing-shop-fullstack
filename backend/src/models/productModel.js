@@ -41,17 +41,17 @@ const lock = async (id, db) => {
   return rows[0];
 };
 
-const values = (data) => [data.category_id, data.sku, data.name,
-  data.slug, data.short_description, data.description,
+const values = (data) => [data.category_id, data.brand_id ?? null,
+  data.sku, data.name, data.slug, data.short_description, data.description,
   data.original_price, data.sale_price, data.stock_quantity,
   data.images[0] ?? null, data.status];
 
 const insert = async (data, db) => {
   const [result] = await db.execute(
-    `INSERT INTO products (category_id, sku, name, slug,
+    `INSERT INTO products (category_id, brand_id, sku, name, slug,
      short_description, description, original_price, sale_price,
      stock_quantity, thumbnail, status)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, values(data)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, values(data)
   );
 
   return result.insertId;
@@ -59,10 +59,10 @@ const insert = async (data, db) => {
 
 const update = async (id, data, db) => {
   await db.execute(
-    `UPDATE products SET category_id = ?, sku = ?, name = ?, slug = ?,
-     short_description = ?, description = ?, original_price = ?,
-     sale_price = ?, stock_quantity = ?, thumbnail = ?, status = ?
-     WHERE id = ?`, [...values(data), id]
+    `UPDATE products SET category_id = ?, brand_id = ?, sku = ?,
+     name = ?, slug = ?, short_description = ?, description = ?,
+     original_price = ?, sale_price = ?, stock_quantity = ?,
+     thumbnail = ?, status = ? WHERE id = ?`, [...values(data), id]
   );
 };
 
