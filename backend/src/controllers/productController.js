@@ -1,6 +1,6 @@
 const service = require("../services/productService");
 const productSearch = require("../services/productSearchService");
-const { productBody, statusBody } = require("../utils/catalogValidation");
+const { productBody, variantBody, statusBody } = require("../utils/catalogValidation");
 const { parseId } = require("../utils/catalogHelpers");
 const { parseProductQuery } = require("../utils/productQuery");
 
@@ -53,5 +53,26 @@ const remove = async (req, res) => {
   res.json({ success: true, message: "Đã ngừng kinh doanh sản phẩm" });
 };
 
+const addVariant = async (req, res) => {
+  const data = await service.addVariant(parseId(req.params.id), variantBody(req.body));
+
+  res.status(201).json({ success: true, data });
+};
+
+const updateVariant = async (req, res) => {
+  const data = await service.updateVariant(parseId(req.params.id),
+    parseId(req.params.variantId), variantBody(req.body));
+
+  res.json({ success: true, data });
+};
+
+const removeVariant = async (req, res) => {
+  const data = await service.removeVariant(parseId(req.params.id),
+    parseId(req.params.variantId));
+
+  res.json({ success: true, data });
+};
+
 module.exports = { listPublic, listManagement, detail,
-  detailManagement, create, update, changeStatus, remove };
+  detailManagement, create, update, changeStatus, remove,
+  addVariant, updateVariant, removeVariant };

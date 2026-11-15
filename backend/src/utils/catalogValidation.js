@@ -142,10 +142,24 @@ const productBody = (body) => {
   };
 };
 
+const variantBody = (body) => {
+  object(body, ["sku", "color", "size", "price_adjustment", "stock_quantity", "status"],
+    ["color", "size", "price_adjustment", "stock_quantity", "status"]);
+
+  return {
+    sku: text(body.sku, 60, "sku", true),
+    color: text(body.color, 50, "color"),
+    size: text(body.size, 20, "size"),
+    price_adjustment: money(body.price_adjustment, "price_adjustment"),
+    stock_quantity: integer(body.stock_quantity, "stock_quantity"),
+    status: status(body.status, ["ACTIVE", "INACTIVE"])
+  };
+};
+
 const statusBody = (body) => {
   object(body, ["status"], ["status"]);
 
   return status(body.status, ["ACTIVE", "INACTIVE", "DISCONTINUED"]);
 };
 
-module.exports = { categoryBody, productBody, statusBody };
+module.exports = { categoryBody, productBody, variantBody, statusBody };

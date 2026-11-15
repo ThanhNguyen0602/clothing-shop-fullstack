@@ -111,8 +111,8 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
-                  "const c = pm.response.json().data.find((x) => x.slug === \"b5-dien-thoai\");",
-                  "pm.test(\"Co danh muc b5-dien-thoai (da chay seed:search)\", () => pm.expect(c).to.exist);",
+                  "const c = pm.response.json().data.find((x) => x.slug === \"ao-khoac\");",
+                  "pm.test(\"Co danh muc ao-khoac (da chay seed:search)\", () => pm.expect(c).to.exist);",
                   "if (c) pm.collectionVariables.set(\"categoryB5\", c.id);"
                 ]
               }
@@ -224,7 +224,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
-                  "pm.test(\"Thu tu SKU\", () => pm.expect(pm.response.json().data.map((x) => x.sku)).to.eql([\"B5-ACC-01\", \"B5-ACC-02\", \"B5-ACC-03\", \"B5-ACC-04\", \"B5-PHONE-01\"]));",
+                  "pm.test(\"Thu tu SKU\", () => pm.expect(pm.response.json().data.map((x) => x.sku)).to.eql([\"B5-ACC-01\", \"B5-ACC-02\", \"B5-ACC-03\", \"B5-ACC-04\", \"B5-AO-01\"]));",
                   "const body = pm.response.json();",
                   "pm.test(\"Dung phan trang\", () => {",
                   "  pm.expect(body.success).to.eql(true);",
@@ -445,7 +445,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/products?search=B5-PHONE-01",
+              "raw": "{{baseUrl}}/api/products?search=B5-AO-01",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -456,7 +456,7 @@
               "query": [
                 {
                   "key": "search",
-                  "value": "B5-PHONE-01"
+                  "value": "B5-AO-01"
                 }
               ]
             },
@@ -483,7 +483,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/products?search=b5-phone-01",
+              "raw": "{{baseUrl}}/api/products?search=b5-ao-01",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -494,7 +494,7 @@
               "query": [
                 {
                   "key": "search",
-                  "value": "b5-phone-01"
+                  "value": "b5-ao-01"
                 }
               ]
             },
@@ -504,7 +504,7 @@
           }
         },
         {
-          "name": "Search 'B5 Laptop' = 4",
+          "name": "Search 'B5-QUAN' = 4",
           "event": [
             {
               "listen": "test",
@@ -521,7 +521,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/products?search=B5%20Laptop",
+              "raw": "{{baseUrl}}/api/products?search=B5-QUAN",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -532,7 +532,7 @@
               "query": [
                 {
                   "key": "search",
-                  "value": "B5%20Laptop"
+                  "value": "B5-QUAN"
                 }
               ]
             },
@@ -830,7 +830,7 @@
           }
         },
         {
-          "name": "Gia 4500000 den 4500000 = 1",
+          "name": "Gia 450000 den 450000 = 1",
           "event": [
             {
               "listen": "test",
@@ -847,7 +847,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/products?search=B5&minPrice=4500000&maxPrice=4500000",
+              "raw": "{{baseUrl}}/api/products?search=B5&minPrice=450000&maxPrice=450000",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -862,11 +862,11 @@
                 },
                 {
                   "key": "minPrice",
-                  "value": "4500000"
+                  "value": "450000"
                 },
                 {
                   "key": "maxPrice",
-                  "value": "4500000"
+                  "value": "450000"
                 }
               ]
             },
@@ -1086,7 +1086,7 @@
           }
         },
         {
-          "name": "Ket hop day du = B5-PHONE-03",
+          "name": "Ket hop day du = B5-AO-03",
           "event": [
             {
               "listen": "test",
@@ -1095,7 +1095,7 @@
                 "exec": [
                   "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
                   "pm.test(\"total = 1\", () => pm.expect(pm.response.json().pagination.total).to.eql(1));",
-                  "pm.test(\"Thu tu SKU\", () => pm.expect(pm.response.json().data.map((x) => x.sku)).to.eql([\"B5-PHONE-03\"]));"
+                  "pm.test(\"Thu tu SKU\", () => pm.expect(pm.response.json().data.map((x) => x.sku)).to.eql([\"B5-AO-03\"]));"
                 ]
               }
             }
@@ -1104,7 +1104,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/products?search=B5&category={{categoryB5}}&brand={{brandAurora}}&minPrice=5000000&maxPrice=10000000&inStock=1&onSale=1&sort=price_asc&page=1&limit=5",
+              "raw": "{{baseUrl}}/api/products?search=B5&category={{categoryB5}}&brand={{brandAurora}}&minPrice=500000&maxPrice=1000000&inStock=1&onSale=1&sort=price_asc&page=1&limit=5",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -1127,11 +1127,11 @@
                 },
                 {
                   "key": "minPrice",
-                  "value": "5000000"
+                  "value": "500000"
                 },
                 {
                   "key": "maxPrice",
-                  "value": "10000000"
+                  "value": "1000000"
                 },
                 {
                   "key": "inStock",
@@ -1250,7 +1250,7 @@
           }
         },
         {
-          "name": "price_desc -> B5-LAPTOP-04",
+          "name": "price_desc -> B5-QUAN-04",
           "event": [
             {
               "listen": "test",
@@ -1258,7 +1258,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
-                  "pm.test(\"Thu tu SKU\", () => pm.expect(pm.response.json().data.map((x) => x.sku)).to.eql([\"B5-LAPTOP-04\"]));"
+                  "pm.test(\"Thu tu SKU\", () => pm.expect(pm.response.json().data.map((x) => x.sku)).to.eql([\"B5-QUAN-04\"]));"
                 ]
               }
             }

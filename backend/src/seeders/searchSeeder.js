@@ -3,46 +3,50 @@ const categories = require("../models/categoryModel");
 const products = require("../models/productModel");
 const withTransaction = require("../utils/withTransaction");
 const { categoryBody, productBody } = require("../utils/catalogValidation");
+const { sampleImages, categoryImage } = require("./sampleImages");
 
+// Du lieu kiem tra tim kiem/loc buoi 05 (chi thoi trang).
+// 15 san pham SKU B5-*: 12 cong khai, 1 INACTIVE, 1 DISCONTINUED, 1 thuoc danh muc an.
+// Nam chung danh muc that cua cua hang; Postman loc bang search=B5 (khop SKU).
 const categorySeeds = [
-  ["B5 Điện thoại", "b5-dien-thoai", "ACTIVE"],
-  ["B5 Laptop", "b5-laptop", "ACTIVE"],
-  ["B5 Phụ kiện", "b5-phu-kien", "ACTIVE"],
-  ["B5 Danh mục ẩn", "b5-danh-muc-an", "INACTIVE"]
+  ["Áo khoác", "ao-khoac", "ACTIVE"],
+  ["Quần jeans", "quan-jeans", "ACTIVE"],
+  ["Phụ kiện", "phu-kien-thoi-trang", "ACTIVE"],
+  ["Danh mục tạm ẩn", "b5-danh-muc-an", "INACTIVE"]
 ];
 
 // sku, name, category slug, brand name, original, sale, stock, status
 const samples = [
-  ["B5-PHONE-01", "B5 Điện thoại A1", "b5-dien-thoai", "B5 Aurora",
-    "5000000.00", "4500000.00", 5, "ACTIVE"],
-  ["B5-PHONE-02", "B5 Điện thoại N1", "b5-dien-thoai", "B5 Nova",
-    "7000000.00", "7000000.00", 0, "ACTIVE"],
-  ["B5-PHONE-03", "B5 Điện thoại A2", "b5-dien-thoai", "B5 Aurora",
-    "10000000.00", "9000000.00", 8, "ACTIVE"],
-  ["B5-PHONE-04", "B5 Điện thoại N2", "b5-dien-thoai", "B5 Nova",
-    "12000000.00", "11000000.00", 2, "ACTIVE"],
-  ["B5-LAPTOP-01", "B5 Laptop A1", "b5-laptop", "B5 Aurora",
-    "15000000.00", "14000000.00", 3, "ACTIVE"],
-  ["B5-LAPTOP-02", "B5 Laptop N1", "b5-laptop", "B5 Nova",
-    "20000000.00", "18000000.00", 0, "ACTIVE"],
-  ["B5-LAPTOP-03", "B5 Laptop A2", "b5-laptop", "B5 Aurora",
-    "18000000.00", "18000000.00", 7, "ACTIVE"],
-  ["B5-LAPTOP-04", "B5 Laptop N2", "b5-laptop", "B5 Nova",
-    "25000000.00", "24000000.00", 4, "ACTIVE"],
-  ["B5-ACC-01", "B5 Chuột A1", "b5-phu-kien", "B5 Aurora",
-    "300000.00", "250000.00", 20, "ACTIVE"],
-  ["B5-ACC-02", "B5 Tai nghe N1", "b5-phu-kien", "B5 Nova",
-    "500000.00", "500000.00", 0, "ACTIVE"],
-  ["B5-ACC-03", "B5 Bàn phím A1", "b5-phu-kien", "B5 Aurora",
-    "1000000.00", "800000.00", 10, "ACTIVE"],
-  ["B5-ACC-04", "B5 Đế laptop", "b5-phu-kien", null,
-    "800000.00", "800000.00", 6, "ACTIVE"],
-  ["B5-HIDDEN-01", "B5 Sản phẩm ẩn", "b5-phu-kien", "B5 Aurora",
-    "100000.00", "90000.00", 1, "INACTIVE"],
-  ["B5-STOP-01", "B5 Ngừng kinh doanh", "b5-phu-kien", "B5 Nova",
-    "100000.00", "90000.00", 1, "DISCONTINUED"],
-  ["B5-HIDDENCAT-01", "B5 Thuộc danh mục ẩn", "b5-danh-muc-an", "B5 Aurora",
-    "100000.00", "90000.00", 1, "ACTIVE"]
+  ["B5-AO-01", "Áo khoác bomber đen", "ao-khoac", "B5 Aurora",
+    "500000.00", "450000.00", 5, "ACTIVE"],
+  ["B5-AO-02", "Áo khoác dù xanh rêu", "ao-khoac", "B5 Nova",
+    "700000.00", "700000.00", 0, "ACTIVE"],
+  ["B5-AO-03", "Áo khoác da lộn nâu", "ao-khoac", "B5 Aurora",
+    "1000000.00", "900000.00", 8, "ACTIVE"],
+  ["B5-AO-04", "Áo măng tô dạ xám", "ao-khoac", "B5 Nova",
+    "1200000.00", "1100000.00", 2, "ACTIVE"],
+  ["B5-QUAN-01", "Quần jeans wash bạc", "quan-jeans", "B5 Aurora",
+    "1500000.00", "1400000.00", 3, "ACTIVE"],
+  ["B5-QUAN-02", "Quần jeans selvedge", "quan-jeans", "B5 Nova",
+    "2000000.00", "1800000.00", 0, "ACTIVE"],
+  ["B5-QUAN-03", "Quần jeans rách gối", "quan-jeans", "B5 Aurora",
+    "1800000.00", "1800000.00", 7, "ACTIVE"],
+  ["B5-QUAN-04", "Quần jeans raw denim", "quan-jeans", "B5 Nova",
+    "2500000.00", "2400000.00", 4, "ACTIVE"],
+  ["B5-ACC-01", "Tất cổ ngắn cotton", "phu-kien-thoi-trang", "B5 Aurora",
+    "30000.00", "25000.00", 20, "ACTIVE"],
+  ["B5-ACC-02", "Khăn tay họa tiết", "phu-kien-thoi-trang", "B5 Nova",
+    "50000.00", "50000.00", 0, "ACTIVE"],
+  ["B5-ACC-03", "Mũ lưỡi trai trơn", "phu-kien-thoi-trang", "B5 Aurora",
+    "100000.00", "80000.00", 10, "ACTIVE"],
+  ["B5-ACC-04", "Thắt lưng vải dù", "phu-kien-thoi-trang", null,
+    "80000.00", "80000.00", 6, "ACTIVE"],
+  ["B5-HIDDEN-01", "Túi tote (tạm ẩn)", "phu-kien-thoi-trang", "B5 Aurora",
+    "10000.00", "9000.00", 1, "INACTIVE"],
+  ["B5-STOP-01", "Ví vải (ngừng bán)", "phu-kien-thoi-trang", "B5 Nova",
+    "10000.00", "9000.00", 1, "DISCONTINUED"],
+  ["B5-HIDDENCAT-01", "Khẩu trang vải (danh mục ẩn)", "b5-danh-muc-an", "B5 Aurora",
+    "10000.00", "9000.00", 1, "ACTIVE"]
 ];
 
 const seedSearch = async () => {
@@ -65,7 +69,8 @@ const seedSearch = async () => {
 
         if (!id) {
           id = await categories.insert(categoryBody({
-            name, slug, status, display_order: index
+            name, slug, status, display_order: index,
+            image_url: categoryImage(slug)
           }), db);
           created.categories += 1;
         }
@@ -104,7 +109,7 @@ const seedSearch = async () => {
           brand_id: brand === null ? null : brandIds.get(brand),
           sku, name, slug: sku.toLowerCase(), original_price: original,
           sale_price: sale, stock_quantity: stock, status,
-          images: ["https://placehold.co/800x600/png"]
+          images: sampleImages(category, sku)
         });
 
         const id = await products.insert(data, db);

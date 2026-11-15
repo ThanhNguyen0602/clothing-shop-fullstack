@@ -1,5 +1,6 @@
+const bcrypt = require("bcrypt");
 const users = require("../models/userModel");
-const { validProfile } = require("../utils/authValidation");
+const { validProfile, validPasswordChange } = require("../utils/authValidation");
 
 const getMe = (req, res) => res.json({
   success: true, data: req.user
@@ -26,4 +27,25 @@ const updateMe = async (req, res, next) => {
   } catch (error) { next(error); }
 };
 
-module.exports = { getMe, updateMe };
+// Token dang dung van hop le den khi het han (JWT khong luu trang thai); giao dien dang xuat lai.
+const changePassword = async (req, res, next) => {
+  try {
+    if (!validPasswordChange(req.body)) {
+      return res.status(400).json({ success: false,
+        message: "Mật khẩu 8–72 byte, mật khẩu mới phải khác mật khẩu hiện tại" });
+    }
+
+    const hash = await users.findHash(req.user.id);
+
+    if (!hash || !await bcrypt.compare(req.body.current_password, hash)) {
+      return res.status(400).json({ success: false,
+        message: "Mật khẩu hiện tại không đúng" });
+    }
+
+    await users.updatePassword(req.user.id, await bcrypt.hash(req.body.new_password, 12));
+
+    return res.json({ success: true, message: "Đã đổi mật khẩu" });
+  } catch (error) { next(error); }
+};
+
+module.exports = { getMe, updateMe, changePassword };

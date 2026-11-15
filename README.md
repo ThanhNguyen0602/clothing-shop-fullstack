@@ -3,7 +3,7 @@
 Đồ án cuối khóa Full-stack: website thương mại điện tử bán quần áo.
 
 ## Công nghệ
-- Front-end: React + Vite, Axios, React Router
+- Front-end: React + Vite, Axios, React Router, Bootstrap 5 + React-Bootstrap, font Be Vietnam Pro
 - Back-end: Node.js + Express (CommonJS, Arrow Function)
 - Database: MySQL 8.0 (`mysql2/promise`)
 - Xác thực: JWT (HS256, hạn 1 giờ) + bcrypt
@@ -16,6 +16,12 @@
 | 03 | Đăng ký, đăng nhập JWT, hồ sơ, phân quyền | Hoàn thành |
 | 04 | API danh mục, sản phẩm, bộ ảnh, seeder | Hoàn thành |
 | 05 | Tìm kiếm, lọc, sắp xếp, phân trang sản phẩm; `GET /api/brands` | Hoàn thành |
+| 06 | Giỏ hàng, đặt hàng COD, trừ kho trong transaction | Hoàn thành |
+| 07 | Quản lý đơn, hủy/hoàn kho, COD, thanh toán mô phỏng, đánh giá | Hoàn thành code, chờ kiểm thử trên máy |
+| 08 | Bố cục và điều hướng React | Hoàn thành code, chờ kiểm thử trên máy |
+| 09 | Đăng ký, đăng nhập, khôi phục phiên, bảo vệ route, hồ sơ | Hoàn thành code, chờ kiểm thử trên máy |
+| 10 | Danh sách, chi tiết sản phẩm, ảnh, đánh giá, thêm giỏ | Hoàn thành code, chờ kiểm thử trên máy |
+| Mở rộng | Giao diện TV Studio; giỏ hàng, đặt hàng, đơn hàng, khu Manager/Admin trên React; biến thể màu/size, upload ảnh, sổ địa chỉ, đổi mật khẩu, dashboard, quản lý người dùng, cấu hình | Hoàn thành code, chờ kiểm thử trên máy |
 
 ## Cách chạy
 1. Clone repo và cài thư viện:
@@ -30,18 +36,38 @@
    node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
    ```
 3. Tạo database: mở `backend/database/schema.sql` trong MySQL Workbench rồi Execute toàn bộ file.
+   Sau đó chạy migration bổ sung bảng biến thể (tại thư mục `backend`, chạy lại nhiều lần vẫn an toàn):
+   ```bash
+   npm run migrate
+   ```
 4. Nạp dữ liệu mẫu (chạy tại thư mục `backend`):
    ```bash
    npm run seed
    npm run verify:seed
    npm run seed:catalog
    npm run seed:search
+   npm run seed:checkout
+   npm run seed:payment
+   npm run seed:clothing   # 20 sản phẩm quần áo mẫu
+   npm run seed:variants   # màu/size cho 20 sản phẩm CL-* (cần chạy migrate trước)
    ```
+   Database đã nạp dữ liệu mẫu cũ (điện thoại, laptop, danh mục "B5 …" trùng lặp)? Dọn rồi seed lại:
+   ```bash
+   npm run cleanup:non-fashion          # xem trước, chưa xóa
+   npm run cleanup:non-fashion -- --yes # xóa thật
+   npm run seed:catalog && npm run seed:search && npm run seed:variants
+   npm run images:samples               # thay ảnh xám bằng ảnh minh họa quần áo
+   ```
+   Ảnh minh họa nằm ở `backend/public/samples`, phục vụ qua `http://localhost:3000/samples/...`.
 5. Chạy cả hai phần từ thư mục gốc:
    ```bash
    npm run dev
    ```
    Back-end: http://localhost:3000 | Front-end: http://localhost:5173
+
+   Lần đầu sau khi cập nhật giao diện TV Studio phải chạy lại `npm install --prefix backend`
+   (thêm `multer`) và `npm install --prefix frontend` (thêm `bootstrap`, `react-bootstrap`).
+   Ảnh tải lên lưu ở `backend/uploads/products` (đã có trong `.gitignore`).
 
 ## Tài khoản mẫu (chỉ dùng trên máy phát triển)
 | Email | Vai trò | Mật khẩu |
@@ -66,7 +92,12 @@ backend/
     middlewares/   requireAuth, authorize, errorHandler
     utils/         validation, helper, withTransaction
     seeders/       dữ liệu mẫu
-frontend/src/      components, pages, layouts, services, hooks, contexts, routes
+frontend/src/
+  components/      common (header, menu, footer, phân trang…), auth (AuthLayout + nền DotGrid),
+                   products (thẻ sản phẩm, chọn màu/size), account (đổi mật khẩu, sổ địa chỉ)
+  pages/           trang khách hàng; manager/ (dashboard, sản phẩm, ảnh/biến thể, danh mục,
+                   đơn, đánh giá); admin/ (người dùng, cấu hình)
+  layouts/ routes/ services/ hooks/ contexts/ utils/ styles/
 docs/              thiết kế CSDL, tài liệu API, kế hoạch, collection Postman
 ```
 

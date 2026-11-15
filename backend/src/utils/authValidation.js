@@ -28,4 +28,9 @@ const validProfile = (b) => onlyKeys(b, ["full_name", "phone"]) &&
   validName(b.full_name) &&
   (b.phone === null || validPhone(b.phone));
 
-module.exports = { validRegister, validLogin, validProfile };
+const validPasswordChange = (b) =>
+  onlyKeys(b, ["current_password", "new_password"]) &&
+  validPassword(b.current_password) && validPassword(b.new_password) &&
+  b.current_password !== b.new_password;
+
+module.exports = { validRegister, validLogin, validProfile, validPasswordChange };

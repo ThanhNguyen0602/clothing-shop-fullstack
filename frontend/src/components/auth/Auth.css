@@ -1,0 +1,399 @@
+
+/* TV STUDIO — AUTHENTICATION */
+
+.tv-auth {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #000;
+  color: #fff;
+  font-family: "Inter", Arial, sans-serif;
+}
+
+.tv-auth *,
+.tv-auth *::before,
+.tv-auth *::after {
+  box-sizing: border-box;
+}
+
+.tv-auth__background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.tv-auth__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.25) 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+}
+
+.tv-auth__container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(30px, 6vw, 100px);
+  width: min(1180px, calc(100% - 48px));
+  padding: 65px 0;
+  pointer-events: none;
+}
+
+/* BRANDING */
+
+.tv-auth__branding {
+  max-width: 570px;
+}
+
+.tv-auth__eyebrow {
+  color: #c084fc;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.tv-auth__branding h2 {
+  margin: 24px 0;
+  font-size: clamp(42px, 6vw, 86px);
+  line-height: 0.98;
+  font-weight: 900;
+  letter-spacing: -3px;
+}
+
+.tv-auth__branding h2 span {
+  color: #a855f7;
+}
+
+.tv-auth__branding > p {
+  max-width: 430px;
+  color: #c4c4c4;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.tv-auth__edition {
+  margin-top: 70px;
+  color: #aaa;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+}
+
+/* GLASS CARD */
+
+.tv-auth__card {
+  width: 100%;
+  padding: clamp(25px, 3.5vw, 48px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 20px;
+  background: rgba(13, 10, 20, 0.74);
+  box-shadow:
+    0 25px 90px rgba(0, 0, 0, 0.45),
+    0 0 50px rgba(168, 85, 247, 0.07);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  pointer-events: auto;
+}
+
+.tv-auth__card-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.tv-auth__line {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(168, 85, 247, 0.6),
+    transparent
+  );
+}
+
+.tv-auth__card h1 {
+  margin-bottom: 12px;
+  font-size: clamp(32px, 3.2vw, 45px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+}
+
+.tv-auth__card h1 span {
+  color: #a855f7;
+}
+
+.tv-auth__subtitle {
+  color: #a4a4ae;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+/* FORM */
+
+.tv-auth .form-label {
+  color: #dedbe5;
+  margin-bottom: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.tv-auth .form-control {
+  height: 52px;
+  padding: 0 17px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.tv-auth .form-control::placeholder {
+  color: #777383;
+}
+
+.tv-auth .form-control:focus {
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  border-color: #a855f7;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.14);
+}
+
+.tv-auth__password {
+  position: relative;
+}
+
+.tv-auth__password .form-control {
+  padding-right: 78px;
+}
+
+.tv-auth__toggle {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: #c084fc;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tv-auth__toggle:hover {
+  color: white;
+}
+
+.tv-auth__form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 16px;
+}
+
+/* SUBMIT BUTTON */
+
+.tv-auth .tv-auth__submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 54px;
+  margin-top: 26px;
+  padding: 0 22px;
+  border: 1px solid #a855f7;
+  border-radius: 8px;
+  background: #a855f7;
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.tv-auth .tv-auth__submit:hover:not(:disabled) {
+  background: #9333ea;
+  border-color: #9333ea;
+  transform: translateY(-2px);
+}
+
+.tv-auth .tv-auth__submit:disabled {
+  opacity: 0.7;
+}
+
+.tv-auth__submit span {
+  font-size: 20px;
+}
+
+.tv-auth__separator {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 30px 0 23px;
+  color: #817b8b;
+  font-size: 10px;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+
+.tv-auth__separator::before,
+.tv-auth__separator::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tv-auth__bottom {
+  text-align: center;
+  color: #aaa;
+  font-size: 13px;
+}
+
+.tv-auth__bottom a {
+  color: #c084fc;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.tv-auth__bottom a:hover {
+  color: white;
+}
+
+.tv-auth__back {
+  display: block;
+  margin-top: 25px;
+  color: #92909b;
+  font-size: 12px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.tv-auth__back:hover {
+  color: white;
+}
+
+/* REGISTER */
+
+.tv-auth--register .tv-auth__container {
+  padding-top: 35px;
+  padding-bottom: 35px;
+}
+
+.tv-auth--register .tv-auth__card {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.tv-auth--register .tv-auth__subtitle {
+  margin-bottom: 20px;
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .tv-auth__container {
+    grid-template-columns: 1fr;
+    max-width: 550px;
+    gap: 35px;
+    padding: 55px 0;
+  }
+
+  .tv-auth__branding {
+    text-align: center;
+    margin: auto;
+  }
+
+  .tv-auth__branding h2 {
+    font-size: 46px;
+  }
+
+  .tv-auth__branding > p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .tv-auth__edition {
+    display: none;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 576px) {
+  .tv-auth__container {
+    width: calc(100% - 28px);
+    padding: 45px 0;
+    gap: 26px;
+  }
+
+  .tv-auth__branding h2 {
+    font-size: 38px;
+    letter-spacing: -1px;
+  }
+
+  .tv-auth__branding > p {
+    font-size: 13px;
+  }
+
+  .tv-auth__card {
+    padding: 26px 20px;
+    border-radius: 14px;
+  }
+
+  .tv-auth__card h1 {
+    font-size: 32px;
+  }
+
+  .tv-auth__form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tv-auth__subtitle {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tv-auth .tv-auth__submit {
+    transition: none;
+  }
+}
+
+/* Bo sung: label boc input (form cua do an khong dung react-bootstrap) */
+.tv-auth label.form-label {
+  display: block;
+  width: 100%;
+}
+
+.tv-auth label.form-label > .form-control,
+.tv-auth label.form-label > .tv-auth__password {
+  display: flex;
+  margin-top: 8px;
+}
+
+.tv-auth .tv-alert {
+  margin-bottom: 14px;
+}

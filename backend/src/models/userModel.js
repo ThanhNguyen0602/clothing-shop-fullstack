@@ -43,5 +43,18 @@ const updateProfile = async (id, data) => {
   return findById(id);
 };
 
+const findHash = async (id) => {
+  const [rows] = await pool.execute(
+    "SELECT password_hash FROM users WHERE id = ?", [id]);
+
+  return rows[0]?.password_hash;
+};
+
+const updatePassword = async (id, hash) => {
+  await pool.execute(
+    "UPDATE users SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+    [hash, id]);
+};
+
 module.exports = { findById, findForLogin,
-  createCustomer, updateProfile };
+  createCustomer, updateProfile, findHash, updatePassword };

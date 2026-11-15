@@ -30,7 +30,13 @@ const find = async (id, management = false, db = pool) => {
      WHERE product_id = ? ORDER BY display_order, id`, [id]
   );
 
-  return { ...rows[0], images };
+  const [variants] = await db.execute(
+    `SELECT id, sku, color, size, price_adjustment, stock_quantity, status
+     FROM product_variants WHERE product_id = ? ${management ? "" : "AND status = 'ACTIVE'"}
+     ORDER BY color, id`, [id]
+  );
+
+  return { ...rows[0], images, variants };
 };
 
 const lock = async (id, db) => {

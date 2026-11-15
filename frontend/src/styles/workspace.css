@@ -1,0 +1,228 @@
+/* Khu Manager / Admin: cung bang mau voi trang ban hang */
+
+.workspace-shell {
+  min-height: 100vh;
+  background: var(--surface);
+}
+
+.workspace-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 24px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+
+.workspace-header .shop-logo img {
+  width: 32px;
+  height: 32px;
+}
+
+.workspace-title {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.workspace-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.workspace-user button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 500;
+}
+
+.workspace-user button:hover {
+  color: var(--accent);
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  min-height: calc(100vh - 64px);
+}
+
+.sidebar {
+  padding: 24px 16px;
+  background: #fff;
+  border-right: 1px solid var(--line);
+}
+
+.sidebar h2 {
+  margin: 0 0 12px 12px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar a {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  color: #3d4554;
+  font-size: 14px;
+}
+
+.sidebar a:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.sidebar a.is-active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.workspace-main {
+  padding: 28px clamp(14px, 3vw, 36px);
+  min-width: 0;
+}
+
+.workspace-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.workspace-filters .form-control {
+  max-width: 320px;
+}
+
+.workspace-filters .form-select {
+  max-width: 220px;
+}
+
+.workspace-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-grid .stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.stat-grid .stat-card span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.stat-grid .stat-card strong {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.stat-grid .stat-card a {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.asset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.asset-grid figure {
+  margin: 0;
+  padding: 8px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.asset-grid figure.is-primary {
+  border-color: var(--accent);
+}
+
+.asset-grid img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.asset-grid figcaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.orders-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.order-panel {
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+
+.order-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.tv-table tr.is-clickable {
+  cursor: pointer;
+}
+
+.tv-table tr.is-selected td {
+  background: var(--accent-soft);
+}
+
+@media (max-width: 900px) {
+  .workspace-grid,
+  .orders-split {
+    grid-template-columns: 1fr;
+  }
+
+  .order-panel {
+    position: static;
+    max-height: none;
+  }
+}

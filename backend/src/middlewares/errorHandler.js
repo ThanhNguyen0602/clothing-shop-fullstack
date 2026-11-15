@@ -9,6 +9,11 @@ const errorHandler = (err, req, res, next) => {
     return send(400, "JSON không hợp lệ");
   }
 
+  if (err.name === "MulterError") {
+    return send(400, err.code === "LIMIT_FILE_SIZE"
+      ? "Ảnh tối đa 5 MB" : "Chỉ gửi một ảnh trong trường image");
+  }
+
   if (err.code === "ER_DUP_ENTRY") {
     return send(409, "Giá trị duy nhất đã tồn tại: kiểm tra email, phone, SKU, slug");
   }
@@ -24,6 +29,11 @@ const errorHandler = (err, req, res, next) => {
   if (Number.isInteger(err.statusCode) &&
     err.statusCode >= 400 && err.statusCode < 500) {
     return send(err.statusCode, err.message);
+  }
+
+  if (["ER_LOCK_DEADLOCK", "ER_LOCK_WAIT_TIMEOUT"].includes(err.code)) {
+    return res.status(503).json({ success: false,
+      message: "Dữ liệu đang được xử lý, hãy kiểm tra lại trước khi thử lại" });
   }
 
   console.error(err);

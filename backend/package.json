@@ -9,7 +9,14 @@
     "seed": "node src/seeders/seed.js",
     "verify:seed": "node src/seeders/verifySeed.js",
     "seed:catalog": "node src/seeders/catalogSeeder.js",
-    "seed:search": "node src/seeders/searchSeeder.js"
+    "seed:search": "node src/seeders/searchSeeder.js",
+    "seed:checkout": "node src/seeders/checkoutSeeder.js",
+    "seed:payment": "node src/seeders/paymentSeeder.js",
+    "seed:clothing": "node src/seeders/clothingSeeder.js",
+    "migrate": "node src/seeders/migrate.js",
+    "seed:variants": "node src/seeders/variantSeeder.js",
+    "cleanup:non-fashion": "node src/seeders/cleanupNonFashion.js",
+    "images:samples": "node src/seeders/refreshSampleImages.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +28,7 @@
     "dotenv": "^18.0.9",
     "express": "^5.3.0",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
     "mysql2": "^3.24.6"
   },
   "devDependencies": {

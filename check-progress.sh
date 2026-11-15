@@ -23,7 +23,9 @@ echo "=== BUOI 2: schema ==="
 has backend/database/schema.sql
 n=$(grep -c 'CREATE TABLE IF NOT EXISTS' backend/database/schema.sql 2>/dev/null)
 if [ "$n" = "23" ]; then pass "schema.sql co 23 bang"; else fail "schema.sql co $n bang (can 23)"; fi
-grepok backend/.env.example "DB_NAME=ecommerce_db" ".env.example dung DB_NAME=ecommerce_db"
+grepok backend/.env.example "DB_NAME=clothing_shop_db" ".env.example dung DB_NAME=clothing_shop_db"
+grepok backend/database/schema.sql "USE clothing_shop_db;" "schema.sql dung cung database clothing_shop_db"
+grepok backend/database/schema.sql "ENGINE=InnoDB" "schema.sql khai bao ENGINE=InnoDB"
 lines=$(wc -l < docs/database-design.md 2>/dev/null)
 if [ "${lines:-0}" -ge 10 ]; then pass "docs/database-design.md da co noi dung ($lines dong)"; else fail "docs/database-design.md con trong/it ($lines dong)"; fi
 
@@ -73,6 +75,82 @@ grepok backend/src/models/productModel.js 'brand_id = ?' "productModel.update gh
 grepok backend/src/services/productService.js 'brands.find' "productService kiem tra thuong hieu"
 grepok docs/api-documentation.md 'pagination' "api-documentation.md co mo ta pagination"
 
+echo "=== BUOI 6: gio hang va dat hang ==="
+for f in utils/checkoutValidation.js utils/orderMoney.js models/commerceModel.js models/checkoutModel.js \
+  models/orderModel.js services/cartService.js services/checkoutService.js services/orderService.js \
+  controllers/cartController.js controllers/orderController.js controllers/checkoutController.js \
+  routes/cartRoutes.js routes/orderRoutes.js routes/checkoutRoutes.js seeders/checkoutSeeder.js; do has "backend/src/$f"; done
+grepok backend/package.json '"seed:checkout"' "package.json co script seed:checkout"
+grepok backend/src/app.js '/api/cart' "app.js gan /api/cart"
+grepok backend/src/app.js '/api/orders' "app.js gan /api/orders"
+grepok backend/src/app.js '/api/checkout' "app.js gan /api/checkout"
+grepok backend/src/middlewares/errorHandler.js 'ER_LOCK_DEADLOCK' "errorHandler xu ly deadlock/timeout (503)"
+grepnot backend/src/services/orderService.js 'THU_ROLLBACK' "khong con dong THU_ROLLBACK_BUOI_06"
+grepok docs/api-documentation.md '/api/orders/my-orders' "api-documentation.md co API don hang"
+has docs/test-results.md
+
+echo "=== BUOI 7: quan ly don, thanh toan, danh gia ==="
+for f in utils/workflowValidation.js models/orderWorkflowModel.js services/orderWorkflowService.js \
+  models/paymentModel.js services/paymentService.js models/reviewModel.js services/reviewService.js \
+  controllers/orderWorkflowController.js controllers/paymentController.js controllers/reviewController.js \
+  routes/orderWorkflowRoutes.js routes/purchaseActionRoutes.js seeders/paymentSeeder.js; do has "backend/src/$f"; done
+grepok backend/package.json '"seed:payment"' "package.json co script seed:payment"
+grepok backend/src/models/checkoutModel.js 'lockPayment' "checkoutModel dung lockPayment"
+grepnot backend/src/services/orderService.js 'lockCod' "orderService khong con lockCod"
+grepok backend/src/utils/checkoutValidation.js 'SIMULATED' "orderBody nhan SIMULATED"
+grepok backend/src/app.js 'orderWorkflowRoutes' "app.js gan orderWorkflowRoutes"
+grepok backend/src/app.js 'purchaseActionRoutes' "app.js gan purchaseActionRoutes"
+grepnot backend/src/routes/productRoutes.js 'router.use(requireAuth' "productRoutes khong chan /:productId/reviews"
+grepnot backend/src/services/orderWorkflowService.js 'THU_ROLLBACK' "khong con dong THU_ROLLBACK_BUOI_07"
+grepok backend/.env.example 'ENABLE_MOCK_PAYMENT' ".env.example co ENABLE_MOCK_PAYMENT"
+has backend/src/seeders/clothingSeeder.js
+grepok backend/package.json '"seed:clothing"' "package.json co script seed:clothing"
+
+echo "=== BUOI 8-10: React ==="
+for f in components/common/PageHeader.jsx components/common/EmptyState.jsx components/common/Sidebar.jsx \
+  components/common/SiteHeader.jsx components/common/SiteFooter.jsx components/common/AuthForm.jsx \
+  layouts/MainLayout.jsx layouts/WorkspaceLayout.jsx layouts/ManagerLayout.jsx layouts/AdminLayout.jsx \
+  pages/HomePage.jsx pages/PlaceholderPage.jsx pages/ProductsPage.jsx pages/LoginPage.jsx pages/RegisterPage.jsx \
+  pages/ProfilePage.jsx pages/ProductDetailsPage.jsx pages/NotFoundPage.jsx routes/AppRoutes.jsx routes/AuthGuards.jsx \
+  services/authService.js services/catalogService.js contexts/AuthContext.js contexts/AuthProvider.jsx \
+  hooks/useRequest.js utils/accountValidation.js utils/catalogDisplay.js components/products/CatalogUI.jsx \
+  components/products/ProductCard.jsx components/products/ProductGallery.jsx components/products/ProductReviews.jsx \
+  components/products/AddToCart.jsx styles/global.css styles/catalog.css; do has "frontend/src/$f"; done
+grepok frontend/src/main.jsx 'BrowserRouter' "BrowserRouter dat tai main.jsx"
+grepnot frontend/src/App.jsx 'BrowserRouter' "App.jsx khong long BrowserRouter"
+grepok frontend/src/main.jsx 'AuthProvider' "main.jsx boc AuthProvider"
+grepok frontend/src/main.jsx 'catalog.css' "main.jsx import catalog.css"
+grepnot frontend/src/main.jsx 'index.css' "khong import CSS demo index.css"
+grepok frontend/index.html 'lang="vi"' "index.html lang=vi"
+grepok frontend/.env.example '/api' "VITE_API_URL co hau to /api"
+
+echo "=== MO RONG: GIAO DIEN MOI + BACKEND BO SUNG ==="
+for f in backend/database/migrations/001_product_variants.sql backend/src/seeders/migrate.js \
+  backend/src/seeders/variantSeeder.js backend/src/models/variantModel.js backend/src/middlewares/upload.js \
+  backend/src/services/productImageService.js backend/src/routes/addressRoutes.js backend/src/routes/adminRoutes.js \
+  backend/src/routes/settingRoutes.js backend/src/services/dashboardService.js \
+  frontend/src/components/auth/AuthLayout.jsx frontend/src/styles/auth.css \
+  frontend/src/components/common/SiteHeader.jsx frontend/src/components/products/VariantPicker.jsx \
+  frontend/src/pages/CartPage.jsx frontend/src/pages/CheckoutPage.jsx frontend/src/pages/OrdersPage.jsx \
+  frontend/src/pages/OrderDetailsPage.jsx frontend/src/pages/manager/DashboardPage.jsx \
+  frontend/src/pages/manager/ProductAssetsPage.jsx frontend/src/pages/admin/UsersPage.jsx \
+  frontend/public/images/tv-logo.png; do has "$f"; done
+grepok backend/package.json '"migrate"' "package.json co script migrate"
+grepok backend/package.json '"multer"' "backend co multer (upload anh)"
+grepok backend/package.json '"images:samples"' "package.json co script images:samples"
+has backend/public/samples/tee-navy.svg
+grepok frontend/package.json '"react-bootstrap"' "frontend co react-bootstrap"
+grepok frontend/src/services/api.js 'interceptors' "api.js tu gan token (interceptor)"
+grepnot frontend/src/styles/global.css 'tailwindcss' "global.css khong import Tailwind"
+grepok .gitignore 'backend/uploads' ".gitignore bo qua anh upload"
+if grep -rqE '\bfunction\b' frontend/src --include=*.jsx --include=*.js; then
+  fail "frontend con dung tu khoa function (quy uoc Arrow Function)"
+else pass "frontend chi dung Arrow Function"; fi
+
+echo "=== POSTMAN ==="
+for f in Buoi03.postman_collection.json Buoi04.postman_collection.json Buoi05.postman_collection.json Buoi06.postman_collection.json Buoi07.postman_collection.json; do has "docs/postman/$f"; done
+if grep -l 'eyJ' docs/postman/*.json >/dev/null 2>&1; then fail "collection Postman con chua token"; else pass "collection Postman khong chua token"; fi
+
 echo "=== AN TOAN ==="
 if git ls-files 2>/dev/null | grep -E '(^|/)\.env$|node_modules' | head -3 | grep -q .; then
   fail "GIT DANG THEO DOI .env HOAC node_modules (nguy hiem)"
@@ -96,15 +174,22 @@ if [ -f backend/package.json ]; then
       try {
         const q = async (sql) => (await pool.query(sql))[0][0].n;
         const t = await q("SELECT COUNT(*) n FROM information_schema.tables WHERE table_schema = DATABASE() AND table_type = \"BASE TABLE\"");
-        console.log("  So bang:", t, t === 23 ? "(OK)" : "(can 23)");
+        console.log("  So bang:", t, t === 23 ? "(OK - chua migrate)" : t === 24 ? "(OK - 23 + product_variants)" : "(can 23, hoac 24 sau npm run migrate)");
         console.log("  roles:", await q("SELECT COUNT(*) n FROM roles"), "(can 3)");
         console.log("  users mau:", await q("SELECT COUNT(*) n FROM users WHERE email IN (\"customer01@example.com\",\"customer02@example.com\",\"manager01@example.com\",\"admin01@example.com\")"), "(can 4)");
         console.log("  categories:", await q("SELECT COUNT(*) n FROM categories"), "(>=3)");
         console.log("  products DEMO-*:", await q("SELECT COUNT(*) n FROM products WHERE sku LIKE \"DEMO-%\""), "(can 5)");
         console.log("  product_images:", await q("SELECT COUNT(*) n FROM product_images"), "(>=5)");
         console.log("  brands:", await q("SELECT COUNT(*) n FROM brands"), "(>=2)");
-        console.log("  products B5-*:", await q("SELECT COUNT(*) n FROM products WHERE sku LIKE \\"B5-%\\""), "(can 15)");
-        console.log("  san pham B5 cong khai:", await q("SELECT COUNT(*) n FROM products p JOIN categories c ON c.id = p.category_id WHERE p.sku LIKE \\"B5-%\\" AND p.status = \\"ACTIVE\\" AND c.status = \\"ACTIVE\\""), "(can 12)");
+        console.log("  products B5-*:", await q("SELECT COUNT(*) n FROM products WHERE sku LIKE \"B5-%\""), "(can 15)");
+        console.log("  shipping B6 Tieu chuan:", await q("SELECT COUNT(*) n FROM shipping_methods WHERE name = \"B6 Tiêu chuẩn\""), "(can 1)");
+        console.log("  payment COD:", await q("SELECT COUNT(*) n FROM payment_methods WHERE code = \"COD\""), "(can 1)");
+        console.log("  cart_items trung (cart, san pham, bien the):", await q("SELECT COUNT(*) n FROM (SELECT 1 FROM cart_items GROUP BY cart_id, product_id, IFNULL(variant_id, 0) HAVING COUNT(*) > 1) t").catch(() => q("SELECT COUNT(*) n FROM (SELECT 1 FROM cart_items GROUP BY cart_id, product_id HAVING COUNT(*) > 1) t")), "(can 0)");
+        console.log("  payment SIMULATED:", await q("SELECT COUNT(*) n FROM payment_methods WHERE code = \"SIMULATED\""), "(can 1)");
+        console.log("  san pham quan ao CL-*:", await q("SELECT COUNT(*) n FROM products WHERE sku LIKE \"CL-%\""), "(can 20)");
+        console.log("  reviews trung order_item:", await q("SELECT COUNT(*) n FROM (SELECT 1 FROM reviews GROUP BY order_item_id HAVING COUNT(*) > 1) t"), "(can 0)");
+        console.log("  product_variants (sau migrate + seed:variants):", await q("SELECT COUNT(*) n FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = \"product_variants\"") ? await q("SELECT COUNT(*) n FROM product_variants") : "chua migrate", "(>0)");
+        console.log("  san pham B5 cong khai:", await q("SELECT COUNT(*) n FROM products p JOIN categories c ON c.id = p.category_id WHERE p.sku LIKE \"B5-%\" AND p.status = \"ACTIVE\" AND c.status = \"ACTIVE\""), "(can 12)");
       } catch (e) { console.log("  Khong doc duoc DB:", e.message); }
       finally { await pool.end(); }
     })();' 2>&1 | grep -v "injected env")
