@@ -1,0 +1,6 @@
+# Chuan hoa xuong dong trong repo (LF), tranh Git bao thay doi gia giua Windows va macOS/Linux.
+* text=auto
+*.sh text eol=lf
+*.png binary
+*.jpg binary
+*.ico binary
