@@ -8,13 +8,15 @@ const reviews = require("../controllers/reviewController");
 
 router.get("/products/:productId/reviews", asyncRoute(reviews.list));
 
-router.use(requireAuth, authorize("CUSTOMER"));
+// Gan guard tung route (khong dung router.use) vi router mount o "/api":
+// router.use se bat ca duong dan khong ton tai va tra 401 thay vi 404.
+const customer = [requireAuth, authorize("CUSTOMER")];
 
-router.patch("/orders/:id/cancel", asyncRoute(orders.cancel));
-router.get("/orders/:id/payments", asyncRoute(payments.list));
-router.post("/orders/:id/payments", asyncRoute(payments.create));
-router.post("/products/:productId/reviews", asyncRoute(reviews.create));
-router.put("/reviews/:id", asyncRoute(reviews.edit));
-router.delete("/reviews/:id", asyncRoute(reviews.remove));
+router.patch("/orders/:id/cancel", customer, asyncRoute(orders.cancel));
+router.get("/orders/:id/payments", customer, asyncRoute(payments.list));
+router.post("/orders/:id/payments", customer, asyncRoute(payments.create));
+router.post("/products/:productId/reviews", customer, asyncRoute(reviews.create));
+router.put("/reviews/:id", customer, asyncRoute(reviews.edit));
+router.delete("/reviews/:id", customer, asyncRoute(reviews.remove));
 
 module.exports = router;
