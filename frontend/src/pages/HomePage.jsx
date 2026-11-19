@@ -25,8 +25,8 @@ const HomePage = () => {
       listProducts({ limit: 8, sort: "newest" }, controller.signal)
     ])
       .then(([categoryItems, productPage]) => {
-        setCategories(categoryItems);
-        setProducts(productPage.data);
+        setCategories(Array.isArray(categoryItems) ? categoryItems : []);
+        setProducts(Array.isArray(productPage?.data) ? productPage.data : []);
       })
       .catch(() => {
         if (!controller.signal.aborted) {
