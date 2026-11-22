@@ -21,6 +21,49 @@ const SORTS = [
 
 const positivePage = (value) => /^[1-9]\d{0,5}$/.test(value ?? "") ? Number(value) : 1;
 
+// Gia tren URL chi nhan so nguyen khong am (bo qua gia tri sai thay vi goi API loi 400).
+const priceParam = (value) => /^\d{1,9}$/.test(value ?? "") ? value : "";
+
+// Form khoang gia tu nhap; key theo gia tri URL nen tu dat lai khi URL doi.
+const PriceRangeForm = ({ min, max, onApply }) => {
+  const [from, setFrom] = useState(min);
+  const [to, setTo] = useState(max);
+  const [error, setError] = useState("");
+
+  const submit = (event) => {
+    event.preventDefault();
+    const low = from.trim();
+    const high = to.trim();
+
+    if ((low && !/^\d{1,9}$/.test(low)) || (high && !/^\d{1,9}$/.test(high))) {
+      setError("Giá phải là số nguyên không âm.");
+      return;
+    }
+
+    if (low && high && Number(low) > Number(high)) {
+      setError("Giá từ không được lớn hơn giá đến.");
+      return;
+    }
+
+    setError("");
+    onApply(low, high);
+  };
+
+  return (
+    <form className="price-range" onSubmit={submit} noValidate>
+      <div className="d-flex gap-2 align-items-center">
+        <input className="form-control form-control-sm" inputMode="numeric" placeholder="Từ"
+          aria-label="Giá từ" value={from} onChange={(event) => setFrom(event.target.value)} />
+        <span aria-hidden="true">–</span>
+        <input className="form-control form-control-sm" inputMode="numeric" placeholder="Đến"
+          aria-label="Giá đến" value={to} onChange={(event) => setTo(event.target.value)} />
+      </div>
+      {error && <small className="text-danger d-block mt-1">{error}</small>}
+      <button type="submit" className="btn btn-sm btn-outline-dark mt-2 w-100">Áp dụng</button>
+    </form>
+  );
+};
+
 const ProductsPage = () => {
   const [params, setParams] = useSearchParams();
   const [categories, setCategories] = useState([]);
@@ -33,6 +76,9 @@ const ProductsPage = () => {
   const category = params.get("category") ?? "";
   const brand = params.get("brand") ?? "";
   const price = params.get("price") ?? "";
+  const minPrice = priceParam(params.get("minPrice"));
+  const maxPrice = priceParam(params.get("maxPrice"));
+  const customPrice = Boolean(minPrice || maxPrice);
   const sort = params.get("sort") ?? "newest";
   const inStock = params.get("inStock") === "1";
   const onSale = params.get("onSale") === "1";
@@ -49,7 +95,9 @@ const ProductsPage = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    const range = PRICE_RANGES.find(([value]) => value === price)?.[2] ?? {};
+    // Khoang gia tu nhap uu tien hon cac muc gia co san.
+    const range = customPrice ? { minPrice, maxPrice }
+      : PRICE_RANGES.find(([value]) => value === price)?.[2] ?? {};
     const query = {
       search, category, brand, sort, page, limit: 12,
       inStock: inStock ? "1" : "", onSale: onSale ? "1" : "", ...range
@@ -62,13 +110,31 @@ const ProductsPage = () => {
       });
 
     return () => controller.abort();
-  }, [queryKey, attempt, search, category, brand, sort, page, inStock, onSale, price]);
+  }, [queryKey, attempt, search, category, brand, sort, page, inStock, onSale, price,
+    customPrice, minPrice, maxPrice]);
 
   const change = (key, value) => {
     const next = new URLSearchParams(params);
     if (value) next.set(key, value);
     else next.delete(key);
     next.delete("page");
+    setParams(next);
+  };
+
+  // Chon muc gia co san thi bo khoang tu nhap, va nguoc lai.
+  const choosePrice = (value) => {
+    const next = new URLSearchParams(params);
+    if (value) next.set("price", value);
+    else next.delete("price");
+    ["minPrice", "maxPrice", "page"].forEach((key) => next.delete(key));
+    setParams(next);
+  };
+
+  const applyCustomPrice = (low, high) => {
+    const next = new URLSearchParams(params);
+    ["price", "minPrice", "maxPrice", "page"].forEach((key) => next.delete(key));
+    if (low) next.set("minPrice", low);
+    if (high) next.set("maxPrice", high);
     setParams(next);
   };
 
@@ -84,7 +150,7 @@ const ProductsPage = () => {
   const categoryName = categories.find((item) => String(item.id) === category)?.name;
   const title = search ? `Kết quả cho “${search}”`
     : onSale ? "Đang giảm giá" : categoryName ?? "Tất cả sản phẩm";
-  const hasFilter = [category, brand, price, inStock, onSale, search].some(Boolean);
+  const hasFilter = [category, brand, price, customPrice, inStock, onSale, search].some(Boolean);
 
   return (
     <div className="tv-page shop-layout">
@@ -106,11 +172,13 @@ const ProductsPage = () => {
           <h2>Giá</h2>
           {PRICE_RANGES.map(([value, label]) => (
             <label key={value || "all"} className="filter-option">
-              <input type="radio" name="price" checked={value === price}
-                onChange={() => change("price", value)} />
+              <input type="radio" name="price" checked={!customPrice && value === price}
+                onChange={() => choosePrice(value)} />
               {label}
             </label>
           ))}
+          <PriceRangeForm key={`${minPrice}-${maxPrice}`} min={minPrice} max={maxPrice}
+            onApply={applyCustomPrice} />
         </div>
 
         {brands.length > 0 && (

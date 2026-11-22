@@ -21,6 +21,7 @@ Base URL: `http://localhost:3000`. Body và response dạng JSON.
 ## Tổng hợp endpoint
 | Method | Đường dẫn | Quyền |
 |---|---|---|
+| GET | /api/health | Công khai (kiểm tra server) |
 | POST | /api/auth/register | Guest |
 | POST | /api/auth/login | Guest |
 | GET | /api/users/me | Đã đăng nhập |

@@ -172,3 +172,30 @@ Front-end được biên dịch thử bằng esbuild (không lỗi cú pháp/imp
 | Admin tự đổi vai trò của mình | Ô chọn bị khóa (API trả 409 nếu gọi thẳng) | ☐ |
 | Admin đổi tên cửa hàng | Header/footer đổi sau khi tải lại | ☐ |
 | Đổi mật khẩu với mật khẩu hiện tại sai | Báo lỗi 400 | ☐ |
+
+## Buổi 11 – Tìm kiếm, lọc và giỏ hàng trên giao diện
+
+API kiểm tra bằng curl với MySQL thật (Docker `mysql:8.0`) ngày 19/11/2026. Các dòng ☐ cần chạy tay trên trình duyệt.
+
+| Thao tác | Kỳ vọng | Thực tế |
+|---|---|---|
+| `GET /api/health` | 200 `{ status: "ok" }` | ✅ (sửa trong buổi này, trước đó trả 401) |
+| `GET /api/khong-ton-tai` | 404 "Không tìm thấy API" | ✅ (trước đó trả 401) |
+| `GET /api/products?search=ao` | Chỉ trả sản phẩm có "áo" trong tên | ✅ 12 sản phẩm |
+| `?category=1`, `?minPrice=200000&maxPrice=500000` | Lọc đúng danh mục / khoảng giá | ✅ 6 / 17 sản phẩm |
+| `?sort=price_asc&limit=3`, `?page=2&limit=5` | Giá tăng dần; trang 2 có `hasPreviousPage` | ✅ |
+| `?search=ao&sort=price_desc&inStock=1` | Kết hợp nhiều điều kiện | ✅ 8 sản phẩm |
+| `?minPrice=900000&maxPrice=100` | 400 "minPrice không được lớn hơn maxPrice" | ✅ |
+| `POST /api/cart` sản phẩm còn hàng / hết hàng | 200 / "Không đủ tồn kho" | ✅ |
+| `PUT /api/cart/:id` số lượng 5 / 999 / 0 | Cập nhật thành tiền / chặn vượt kho / chặn số ≤ 0 | ✅ |
+| `DELETE /api/cart/:id`; gọi `/api/cart` không token | Xóa dòng; 401 | ✅ |
+| Gõ từ khóa ở header | URL `/products?search=...`, F5 vẫn giữ kết quả | ☐ |
+| Chọn danh mục + thương hiệu + sắp xếp, bấm Back/Forward | Bộ lọc và kết quả đi theo URL | ☐ |
+| Nhập khoảng giá tự chọn 100000 – 300000 → Áp dụng | URL có `minPrice`/`maxPrice`; mức giá có sẵn bỏ chọn | ☐ |
+| Nhập giá từ > giá đến, hoặc nhập chữ | Báo lỗi dưới ô, không gọi API | ☐ |
+| Chuyển trang bằng Pager rồi đổi bộ lọc | Quay về trang 1 | ☐ |
+| Giỏ: bấm +/− tới giới hạn | − khóa ở 1, + khóa ở mức tồn kho | ☐ |
+| Bỏ chọn 1 dòng | Tạm tính chỉ cộng các dòng được chọn | ☐ |
+| Xóa 1 dòng, xóa toàn bộ giỏ | Danh sách cập nhật; giỏ trống hiện EmptyState | ☐ |
+| Bấm "Tiến hành đặt hàng" | Sang `/checkout` với đúng các dòng đã chọn | ☐ |
+| Chưa đăng nhập vào `/cart` | Về `/login`, đăng nhập Customer xong quay lại `/cart` | ☐ |

@@ -32,6 +32,10 @@ app.get("/", (req, res) => {
   res.json({ message: "E-commerce API is running" });
 });
 
+app.get("/api/health", (req, res) => {
+  res.json({ success: true, data: { status: "ok", time: new Date().toISOString() } });
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
