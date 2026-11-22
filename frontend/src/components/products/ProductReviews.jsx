@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { getReviews } from "../../services/catalogService";
 import useRequest from "../../hooks/useRequest";
+import ReviewRatingOverview from "./ReviewRatingOverview";
 import { RequestError, Loading } from "./CatalogUI";
 import Pager from "../common/Pager";
 import { dateText } from "../../utils/catalogDisplay";
@@ -18,6 +19,7 @@ const ProductReviews = ({ id }) => {
       {error && <RequestError retry={retry} />}
       {data && (
         <>
+        <ReviewRatingOverview summary={data.summary} />
           <p className="review-summary">{Number(data.summary.count) === 0
             ? "Chưa có đánh giá. Khách đã nhận hàng có thể đánh giá trong trang đơn hàng."
             : `${Number(data.summary.average).toFixed(1)}/5 sao, ${data.summary.count} đánh giá`}</p>
