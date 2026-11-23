@@ -125,7 +125,10 @@ const OrderDetails = ({ id }) => {
                   </span>
                   <strong>{priceText(item.total_price)}</strong>
                 </div>
-                {data.order_status === "COMPLETED" && !reviewed.includes(item.id) && (
+                {data.order_status === "COMPLETED" && (item.review_id || reviewed.includes(item.id)) && (
+                  <small className="text-success d-block">✓ Bạn đã đánh giá sản phẩm này</small>
+                )}
+                {data.order_status === "COMPLETED" && !item.review_id && !reviewed.includes(item.id) && (
                   reviewing === item.id
                     ? <ReviewForm item={item} onDone={(message) => {
                         setReviewed([...reviewed, item.id]);

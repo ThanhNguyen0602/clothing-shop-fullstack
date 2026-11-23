@@ -199,3 +199,29 @@ API kiểm tra bằng curl với MySQL thật (Docker `mysql:8.0`) ngày 19/11/2
 | Xóa 1 dòng, xóa toàn bộ giỏ | Danh sách cập nhật; giỏ trống hiện EmptyState | ☐ |
 | Bấm "Tiến hành đặt hàng" | Sang `/checkout` với đúng các dòng đã chọn | ☐ |
 | Chưa đăng nhập vào `/cart` | Về `/login`, đăng nhập Customer xong quay lại `/cart` | ☐ |
+
+## Buổi 12 – Checkout và lịch sử đơn hàng
+
+API kiểm tra bằng curl với MySQL thật ngày 19/11/2026 (customer01, manager01). Các dòng ☐ cần chạy tay trên trình duyệt.
+
+| Thao tác | Kỳ vọng | Thực tế |
+|---|---|---|
+| `GET /api/checkout/options` | Có phương thức vận chuyển và COD/SIMULATED | ✅ B6 Tiêu chuẩn 30.000đ; COD, SIMULATED |
+| `POST /api/orders` SĐT "123" | 400 "Số điện thoại gồm 10 số…" | ✅ |
+| `POST /api/orders` gửi thêm `total_amount` | 400, không cho client tự đặt giá | ✅ |
+| Đặt đơn COD 3 × 80.000đ | Tạm tính 240.000 + ship 30.000 = 270.000; `PENDING_CONFIRMATION`/`UNPAID` | ✅ |
+| Tồn kho sau khi đặt / giỏ sau khi đặt | Giảm 6 → 3 / giỏ trống | ✅ |
+| `GET /api/orders/my-orders`, `GET /api/orders/:id` | Có đơn vừa đặt, có `history` | ✅ |
+| customer02 xem đơn của customer01 | 404 | ✅ |
+| Hủy đơn `PENDING_CONFIRMATION` | `CANCELLED`, lưu lý do, tồn kho 3 → 6 | ✅ |
+| Manager chuyển tới DELIVERED → thu COD → COMPLETED; Customer đánh giá | Đánh giá `VISIBLE`; gửi lần 2 bị chặn | ✅ |
+| `GET /api/orders/:id` sau khi đánh giá | Dòng hàng có `review_id` | ✅ (thêm trong buổi này) |
+| Checkout khi chưa có sổ địa chỉ | Hiện link sang Hồ sơ; nhập tay được | ☐ |
+| Có địa chỉ mặc định | Tự điền người nhận, SĐT, địa chỉ; đổi địa chỉ thì form đổi theo | ☐ |
+| Nhập SĐT sai, bỏ trống tên/địa chỉ | Bị chặn trên giao diện | ☐ |
+| Bấm "Xác nhận đặt hàng" 2 lần liên tiếp | Chỉ tạo 1 đơn | ☐ |
+| Đặt xong | Sang `/orders/:id`, hiện "Đặt hàng thành công!" | ☐ |
+| `/orders` | Bảng đơn với badge trạng thái, phân trang | ☐ |
+| Hủy đơn trên giao diện | Hỏi lý do; badge đổi "Đã hủy"; nút Hủy biến mất | ☐ |
+| Đơn SIMULATED → "Thanh toán ngay" | Hiện mã phiên SIM-… | ☐ |
+| Đơn COMPLETED: viết đánh giá rồi F5 | Hiện "✓ Bạn đã đánh giá", không còn nút viết | ☐ |
