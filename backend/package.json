@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "dev": "npm run seed:all && nodemon src/server.js",
+    "seed:all": "npm run seed && npm run seed:catalog && npm run seed:search && npm run seed:checkout && npm run seed:payment && npm run seed:clothing && npm run seed:variants",
     "seed": "node src/seeders/seed.js",
     "verify:seed": "node src/seeders/verifySeed.js",
     "seed:catalog": "node src/seeders/catalogSeeder.js",
