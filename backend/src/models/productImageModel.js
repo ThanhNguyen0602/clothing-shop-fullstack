@@ -1,3 +1,5 @@
+const pool = require("../config/database");
+
 const list = async (db, productId) => {
   const [rows] = await db.execute(
     `SELECT id, image_url, is_primary, display_order FROM product_images
@@ -31,4 +33,13 @@ const setThumbnail = async (db, productId, url) => {
   await db.execute("UPDATE products SET thumbnail = ? WHERE id = ?", [url, productId]);
 };
 
-module.exports = { list, insert, remove, reorder, setThumbnail };
+// Cung mot URL co the duoc dan vao san pham khac hoac danh muc.
+const isUsed = async (url) => {
+  const [rows] = await pool.execute(
+    `SELECT 1 FROM product_images WHERE image_url = ?
+     UNION ALL SELECT 1 FROM categories WHERE image_url = ? LIMIT 1`, [url, url]);
+
+  return rows.length > 0;
+};
+
+module.exports = { isUsed, list, insert, remove, reorder, setThumbnail };

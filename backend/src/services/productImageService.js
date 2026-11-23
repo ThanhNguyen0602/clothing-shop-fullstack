@@ -22,6 +22,19 @@ const localFile = (url) => {
   return index === -1 ? null : path.join(uploadDir, path.basename(url.slice(index + marker.length)));
 };
 
+// Don file upload khong con san pham nao dung.
+const removeUnusedFiles = async (urls) => {
+  for (const url of urls) {
+    const file = localFile(url);
+
+    try {
+      if (file && !await images.isUsed(url)) await unlinkQuietly(file);
+    } catch (error) {
+      console.error("Không dọn được file ảnh:", error.message);
+    }
+  }
+};
+
 const realImage = async (file) => {
   const handle = await fs.promises.open(file, "r");
 
@@ -84,9 +97,7 @@ const remove = async (productId, imageId) => {
     return products.find(productId, true, db);
   });
 
-  const file = localFile(removedUrl);
-
-  if (file) await unlinkQuietly(file);
+  await removeUnusedFiles([removedUrl]);
 
   return data;
 };
@@ -106,4 +117,4 @@ const setPrimary = (productId, imageId) => withTransaction(async (db) => {
   return products.find(productId, true, db);
 });
 
-module.exports = { add, remove, setPrimary, localFile };
+module.exports = { add, remove, setPrimary, localFile, removeUnusedFiles };

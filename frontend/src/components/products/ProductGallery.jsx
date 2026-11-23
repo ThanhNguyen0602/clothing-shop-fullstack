@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ProductImage } from "./CatalogUI";
+import { imageSrc } from "../../utils/catalogDisplay";
 
 const ProductGallery = ({ product }) => {
   const [selected, setSelected] = useState(null);
@@ -21,7 +22,7 @@ const ProductGallery = ({ product }) => {
               aria-pressed={active === image.image_url}
               aria-label={`Ảnh ${index + 1}`}
               onClick={() => setSelected(image.image_url)}>
-              <img src={image.image_url} alt="" loading="lazy" />
+              <img src={imageSrc(image.image_url)} alt="" loading="lazy" />
             </button>
           ))}
         </div>

@@ -191,7 +191,7 @@ API kiểm tra bằng curl với MySQL thật (Docker `mysql:8.0`) ngày 19/11/2
 | `DELETE /api/cart/:id`; gọi `/api/cart` không token | Xóa dòng; 401 | ✅ |
 | Gõ từ khóa ở header | URL `/products?search=...`, F5 vẫn giữ kết quả | ☐ |
 | Chọn danh mục + thương hiệu + sắp xếp, bấm Back/Forward | Bộ lọc và kết quả đi theo URL | ☐ |
-| Nhập khoảng giá tự chọn 100000 – 300000 → Áp dụng | URL có `minPrice`/`maxPrice`; mức giá có sẵn bỏ chọn | ☐ |
+| Nhập khoảng giá tự chọn 100000 – 300000 → Áp dụng | URL có `minPrice`/`maxPrice`; mức giá có sẵn bỏ chọn | ✅ (Chromium 23/11; F5 vẫn giữ) |
 | Nhập giá từ > giá đến, hoặc nhập chữ | Báo lỗi dưới ô, không gọi API | ☐ |
 | Chuyển trang bằng Pager rồi đổi bộ lọc | Quay về trang 1 | ☐ |
 | Giỏ: bấm +/− tới giới hạn | − khóa ở 1, + khóa ở mức tồn kho | ☐ |
@@ -225,3 +225,26 @@ API kiểm tra bằng curl với MySQL thật ngày 19/11/2026 (customer01, mana
 | Hủy đơn trên giao diện | Hỏi lý do; badge đổi "Đã hủy"; nút Hủy biến mất | ☐ |
 | Đơn SIMULATED → "Thanh toán ngay" | Hiện mã phiên SIM-… | ☐ |
 | Đơn COMPLETED: viết đánh giá rồi F5 | Hiện "✓ Bạn đã đánh giá", không còn nút viết | ☐ |
+
+## Buổi 13 – Manager quản lý sản phẩm và danh mục
+
+Kiểm tra ngày 23/11/2026 với MySQL thật: API bằng script Node, giao diện bằng Chromium headless (Playwright).
+Dữ liệu tạm đã xóa sau khi chạy. Các dòng ☐ chưa chạy trên giao diện.
+
+| Thao tác | Kỳ vọng | Thực tế |
+|---|---|---|
+| `/api/management/products` không token / Customer / Manager | 401 / 403 / 200 | ✅ |
+| Customer vào `/manager/products` | Không thấy trang quản lý | ✅ giao diện |
+| Manager đăng nhập | Vào `/manager`, dashboard có số liệu | ✅ giao diện |
+| Thêm danh mục; trùng slug; sửa | 201; 409; 200 | ✅ (thêm: cả giao diện) |
+| Xóa danh mục đang có sản phẩm / danh mục trống | 409, giao diện báo lỗi / 200 | ✅ |
+| Thêm, tìm, ẩn/hiện sản phẩm | Lưu và lọc đúng | ✅ giao diện |
+| Giá âm, giá bán > giá gốc, tồn kho lẻ, URL ảnh sai | Chặn ở form | ✅ giao diện; API cũng trả 400 với giá và tồn kho |
+| INACTIVE / DISCONTINUED | Khách mở chi tiết nhận 404 | ✅ API |
+| Tải .pdf, file giả .png, ảnh > 5 MB | 400, không để lại file | ✅ API; .pdf cả giao diện |
+| Tải ảnh .png | Hiện được ảnh, URL cùng origin khi dùng proxy Vite | ✅ giao diện |
+| Đặt ảnh chính, xóa ảnh | Thumbnail đổi; file bị xóa | ✅ API |
+| Bỏ URL ảnh trong form sửa | File upload không còn dùng bị xóa | ✅ (trước đó file bị bỏ lại) |
+| Thêm biến thể; trùng màu + size | Tồn kho = tổng biến thể; 409 | ✅ |
+| Xem ảnh upload qua địa chỉ Codespaces | Ảnh hiển thị | ☐ |
+| Sửa/xóa biến thể, đặt ảnh chính, sửa danh mục trên giao diện | Cập nhật ngay | ☐ |

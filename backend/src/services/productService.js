@@ -2,6 +2,8 @@ const categories = require("../models/categoryModel");
 const brands = require("../models/brandModel");
 const products = require("../models/productModel");
 const variants = require("../models/variantModel");
+const images = require("../models/productImageModel");
+const { removeUnusedFiles } = require("./productImageService");
 const withTransaction = require("../utils/withTransaction");
 const { fail } = require("../utils/catalogHelpers");
 
@@ -17,7 +19,7 @@ const detail = async (id, management = false) => {
   return item;
 };
 
-const save = async (data, id = null) => withTransaction(async (db) => {
+const saveInTransaction = (data, id) => withTransaction(async (db) => {
   if (id !== null && !await products.lock(id, db)) {
     fail(404, "Không tìm thấy sản phẩm");
   }
@@ -34,6 +36,7 @@ const save = async (data, id = null) => withTransaction(async (db) => {
     }
   }
 
+  const oldImages = id === null ? [] : await images.list(db, id);
   const productId = id ?? await products.insert(data, db);
 
   if (id !== null) await products.update(id, data, db);
@@ -42,8 +45,20 @@ const save = async (data, id = null) => withTransaction(async (db) => {
   // San pham co bien the: stock_quantity trong body bi thay bang tong ton kho bien the.
   await variants.syncProductStock(db, productId);
 
-  return products.find(productId, true, db);
+  const removedUrls = oldImages.map((item) => item.image_url)
+    .filter((url) => !data.images.includes(url));
+
+  return { item: await products.find(productId, true, db), removedUrls };
 });
+
+const save = async (data, id = null) => {
+  const { item, removedUrls } = await saveInTransaction(data, id);
+
+  // Chi xoa file sau khi commit; loi don file khong lam hong ket qua da luu.
+  await removeUnusedFiles(removedUrls);
+
+  return item;
+};
 
 const ownVariant = async (db, productId, variantId) => {
   if (!await products.lock(productId, db)) fail(404, "Không tìm thấy sản phẩm");

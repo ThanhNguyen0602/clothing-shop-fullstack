@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { priceText } from "../../utils/catalogDisplay";
+import { imageSrc, priceText } from "../../utils/catalogDisplay";
 
 const ProductImage = ({ src, alt, className = "catalog-image" }) => {
   const [broken, setBroken] = useState("");
 
   return src && broken !== src
-    ? <img className={className} src={src} alt={alt} loading="lazy"
+    ? <img className={className} src={imageSrc(src)} alt={alt} loading="lazy"
         onError={() => setBroken(src)} />
     : (
       <div className={`${className} fashion-product-placeholder`}>Chưa có ảnh</div>

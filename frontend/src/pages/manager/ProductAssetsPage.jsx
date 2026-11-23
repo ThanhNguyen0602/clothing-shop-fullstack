@@ -7,7 +7,7 @@ import { Loading } from "../../components/products/CatalogUI";
 import { addVariant, getManagedProduct, removeImage, removeVariant, setPrimaryImage,
   updateVariant, uploadImage } from "../../services/managementService";
 import { apiError, isCanceled } from "../../services/api";
-import { moneyInput, priceText, validProductId, variantPrice } from "../../utils/catalogDisplay";
+import { imageSrc, moneyInput, priceText, validProductId, variantPrice } from "../../utils/catalogDisplay";
 import NotFoundPage from "../NotFoundPage";
 
 const blankVariant = { sku: "", color: "", size: "", price_adjustment: "0",
@@ -121,7 +121,7 @@ const Assets = ({ id }) => {
         <div className="asset-grid">
           {product.images.map((image) => (
             <figure key={image.id} className={Number(image.is_primary) ? "is-primary" : ""}>
-              <img src={image.image_url} alt="" loading="lazy" />
+              <img src={imageSrc(image.image_url)} alt="" loading="lazy" />
               <figcaption>
                 {Number(image.is_primary) ? <strong>Ảnh chính</strong> : (
                   <button type="button" className="btn btn-sm btn-outline-dark" disabled={busy}

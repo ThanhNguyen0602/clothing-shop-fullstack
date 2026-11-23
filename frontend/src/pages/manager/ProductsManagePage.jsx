@@ -18,6 +18,14 @@ const blank = { category_id: "", brand_id: "", sku: "", name: "", slug: "",
   short_description: "", description: "", original_price: "", sale_price: "",
   stock_quantity: "0", status: "ACTIVE", images: "" };
 
+const webUrl = (value) => {
+  try {
+    return ["http:", "https:"].includes(new URL(value).protocol);
+  } catch {
+    return false;
+  }
+};
+
 // Chuyen du lieu form -> body dung chuan productBody o backend.
 const toBody = (form) => {
   const original = moneyInput(form.original_price);
@@ -25,6 +33,12 @@ const toBody = (form) => {
 
   if (!original || !sale) throw new Error("Giá phải là số không âm, tối đa 2 số lẻ.");
   if (!/^\d+$/.test(form.stock_quantity)) throw new Error("Tồn kho phải là số nguyên ≥ 0.");
+  if (Number(sale) > Number(original)) throw new Error("Giá bán không được lớn hơn giá gốc.");
+
+  const images = form.images.split("\n").map((line) => line.trim()).filter(Boolean);
+
+  if (images.length > 10) throw new Error("Mỗi sản phẩm tối đa 10 ảnh.");
+  if (!images.every(webUrl)) throw new Error("URL ảnh phải bắt đầu bằng http:// hoặc https://.");
 
   return {
     category_id: Number(form.category_id),
@@ -35,7 +49,7 @@ const toBody = (form) => {
     description: form.description.trim() || null,
     original_price: original, sale_price: sale,
     stock_quantity: Number(form.stock_quantity), status: form.status,
-    images: form.images.split("\n").map((line) => line.trim()).filter(Boolean)
+    images
   };
 };
 
