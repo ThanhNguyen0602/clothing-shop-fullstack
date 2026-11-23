@@ -63,9 +63,12 @@ const detail = async (db, userId, id) => {
 
   if (!rows[0]) return null;
 
-  const [items] = await db.execute(`SELECT id, product_id, variant_id, product_name,
-    variant_label, unit_price, quantity, total_price FROM order_items
-    WHERE order_id = ? ORDER BY id`, [id]);
+  // review_id != null: dong hang da duoc danh gia (moi order_item chi 1 review).
+  const [items] = await db.execute(`SELECT oi.id, oi.product_id, oi.variant_id,
+    oi.product_name, oi.variant_label, oi.unit_price, oi.quantity, oi.total_price,
+    r.id AS review_id FROM order_items oi
+    LEFT JOIN reviews r ON r.order_item_id = oi.id
+    WHERE oi.order_id = ? ORDER BY oi.id`, [id]);
 
   const [history] = await db.execute(`SELECT old_status, new_status, note,
     created_at FROM order_status_histories WHERE order_id = ? ORDER BY id`, [id]);

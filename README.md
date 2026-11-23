@@ -22,6 +22,7 @@
 | 09 | Đăng ký, đăng nhập, khôi phục phiên, bảo vệ route, hồ sơ | Hoàn thành code, chờ kiểm thử trên máy |
 | 10 | Danh sách, chi tiết sản phẩm, ảnh, đánh giá, thêm giỏ | Hoàn thành code, chờ kiểm thử trên máy |
 | 11 | Tìm kiếm, lọc (khoảng giá tự nhập), sắp xếp, phân trang đồng bộ URL; giỏ hàng; `GET /api/health` | API đã kiểm thử, chờ kiểm thử giao diện |
+| 12 | Checkout (sổ địa chỉ, vận chuyển, COD/mô phỏng), lịch sử và chi tiết đơn, hủy đơn, đánh giá | API đã kiểm thử, chờ kiểm thử giao diện |
 | Mở rộng | Giao diện TV Studio; giỏ hàng, đặt hàng, đơn hàng, khu Manager/Admin trên React; biến thể màu/size, upload ảnh, sổ địa chỉ, đổi mật khẩu, dashboard, quản lý người dùng, cấu hình | Hoàn thành code, chờ kiểm thử trên máy |
 
 ## Cách chạy

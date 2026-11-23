@@ -250,7 +250,7 @@ Khác danh sách sản phẩm: không trả `total`, dùng `has_next` (đọc d�
 
 ### GET /api/orders/:id
 Đơn của chính Customer gồm người nhận, địa chỉ, tiền, trạng thái, `items` (snapshot `product_name`, `unit_price`,
-`quantity`, `total_price`) và `history`. Không trả `internal_note`. Đơn của người khác hoặc không tồn tại: 404.
+`quantity`, `total_price`, `review_id` — khác `null` nếu dòng đã được đánh giá) và `history`. Không trả `internal_note`. Đơn của người khác hoặc không tồn tại: 404.
 
 ### Phân chia trách nhiệm
 Controller kiểm tra body/query và trả HTTP; `cartService`, `orderService`, `checkoutService` xử lý nghiệp vụ,
