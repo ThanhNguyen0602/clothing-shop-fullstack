@@ -23,4 +23,10 @@ const moneyInput = (value) => {
   return /^(0|[1-9]\d{0,12})(\.\d{1,2})?$/.test(text) ? text : null;
 };
 
-export { validProductId, priceText, dateText, variantPrice, moneyInput };
+// Anh upload luu URL http://localhost:3000/...; khi chay qua proxy Vite (VITE_API_URL="/api")
+// doi sang duong dan cung origin de xem duoc tren Codespaces.
+const imageSrc = (src) => src && import.meta.env.VITE_API_URL?.startsWith("/")
+  ? src.replace(/^https?:\/\/(localhost|127\.0\.0\.1):\d+(?=\/(uploads|samples)\/)/, "")
+  : src;
+
+export { imageSrc, validProductId, priceText, dateText, variantPrice, moneyInput };
