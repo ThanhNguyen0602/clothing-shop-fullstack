@@ -1,0 +1,80 @@
+/* Bo sung Buoi 11 - Hieu: giao dien khung diem sao trung binh. */
+.hieu-rating-overview {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 20px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.hieu-rating-overview__score {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.hieu-rating-overview__score strong {
+  font-size: 36px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.hieu-rating-overview__score span {
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.hieu-rating-overview__detail {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.hieu-rating-overview__stars {
+  position: relative;
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 3px;
+  white-space: nowrap;
+}
+
+.hieu-rating-overview__stars-base {
+  color: #cad0d9;
+}
+
+.hieu-rating-overview__stars-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  overflow: hidden;
+  color: #e0a526;
+  white-space: nowrap;
+}
+
+.hieu-rating-overview__count {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (max-width: 520px) {
+  .hieu-rating-overview {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .hieu-rating-overview__score strong {
+    font-size: 30px;
+  }
+
+  .hieu-rating-overview__stars {
+    font-size: 22px;
+  }
+}
