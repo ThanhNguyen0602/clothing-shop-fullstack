@@ -5,7 +5,7 @@ import { addToCart } from "../../services/catalogService";
 import { apiError } from "../../services/api";
 
 // Them vao gio: neu san pham co bien the thi bat buoc da chon variant.
-const AddToCart = ({ id, stock, variant, needsVariant = false }) => {
+const AddToCart = ({ id, stock, variant, needsVariant = false, onStockChanged }) => {
   const { user, signOut } = useAuth();
   const sending = useRef(false);
   const [quantity, setQuantity] = useState(1);

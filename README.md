@@ -3,30 +3,33 @@
 Đồ án cuối khóa Full-stack: website thương mại điện tử bán quần áo.
 
 ## Công nghệ
+
 - Front-end: React + Vite, Axios, React Router, Bootstrap 5 + React-Bootstrap, font Be Vietnam Pro
 - Back-end: Node.js + Express (CommonJS, Arrow Function)
 - Database: MySQL 8.0 (`mysql2/promise`)
 - Xác thực: JWT (HS256, hạn 1 giờ) + bcrypt
 
 ## Trạng thái các buổi
-| Buổi | Nội dung | Trạng thái |
-|---|---|---|
-| 01 | Setup monorepo, Express, React + Vite | Hoàn thành |
-| 02 | Schema 23 bảng (`backend/database/schema.sql`) | Hoàn thành |
-| 03 | Đăng ký, đăng nhập JWT, hồ sơ, phân quyền | Hoàn thành |
-| 04 | API danh mục, sản phẩm, bộ ảnh, seeder | Hoàn thành |
-| 05 | Tìm kiếm, lọc, sắp xếp, phân trang sản phẩm; `GET /api/brands` | Hoàn thành |
-| 06 | Giỏ hàng, đặt hàng COD, trừ kho trong transaction | Hoàn thành |
-| 07 | Quản lý đơn, hủy/hoàn kho, COD, thanh toán mô phỏng, đánh giá | Hoàn thành code, chờ kiểm thử trên máy |
-| 08 | Bố cục và điều hướng React | Hoàn thành code, chờ kiểm thử trên máy |
-| 09 | Đăng ký, đăng nhập, khôi phục phiên, bảo vệ route, hồ sơ | Hoàn thành code, chờ kiểm thử trên máy |
-| 10 | Danh sách, chi tiết sản phẩm, ảnh, đánh giá, thêm giỏ | Hoàn thành code, chờ kiểm thử trên máy |
-| 11 | Tìm kiếm, lọc (khoảng giá tự nhập), sắp xếp, phân trang đồng bộ URL; giỏ hàng; `GET /api/health` | API đã kiểm thử, chờ kiểm thử giao diện |
-| 12 | Checkout (sổ địa chỉ, vận chuyển, COD/mô phỏng), lịch sử và chi tiết đơn, hủy đơn, đánh giá | API đã kiểm thử, chờ kiểm thử giao diện |
-| 13 | Manager: dashboard, quản lý sản phẩm, ảnh/biến thể, danh mục; dọn file ảnh không dùng | Đã kiểm thử API và giao diện (Chromium headless) |
-| Mở rộng | Giao diện TV Studio; giỏ hàng, đặt hàng, đơn hàng, khu Manager/Admin trên React; biến thể màu/size, upload ảnh, sổ địa chỉ, đổi mật khẩu, dashboard, quản lý người dùng, cấu hình | Hoàn thành code, chờ kiểm thử trên máy |
+
+| Buổi    | Nội dung                                                                                                                                                                          | Trạng thái                                       |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| 01      | Setup monorepo, Express, React + Vite                                                                                                                                             | Hoàn thành                                       |
+| 02      | Schema 23 bảng (`backend/database/schema.sql`)                                                                                                                                    | Hoàn thành                                       |
+| 03      | Đăng ký, đăng nhập JWT, hồ sơ, phân quyền                                                                                                                                         | Hoàn thành                                       |
+| 04      | API danh mục, sản phẩm, bộ ảnh, seeder                                                                                                                                            | Hoàn thành                                       |
+| 05      | Tìm kiếm, lọc, sắp xếp, phân trang sản phẩm; `GET /api/brands`                                                                                                                    | Hoàn thành                                       |
+| 06      | Giỏ hàng, đặt hàng COD, trừ kho trong transaction                                                                                                                                 | Hoàn thành                                       |
+| 07      | Quản lý đơn, hủy/hoàn kho, COD, thanh toán mô phỏng, đánh giá                                                                                                                     | Hoàn thành code, chờ kiểm thử trên máy           |
+| 08      | Bố cục và điều hướng React                                                                                                                                                        | Hoàn thành code, chờ kiểm thử trên máy           |
+| 09      | Đăng ký, đăng nhập, khôi phục phiên, bảo vệ route, hồ sơ                                                                                                                          | Hoàn thành code, chờ kiểm thử trên máy           |
+| 10      | Danh sách, chi tiết sản phẩm, ảnh, đánh giá, thêm giỏ                                                                                                                             | Hoàn thành code, chờ kiểm thử trên máy           |
+| 11      | Tìm kiếm, lọc (khoảng giá tự nhập), sắp xếp, phân trang đồng bộ URL; giỏ hàng; khối sản phẩm bán chạy (sort=best_selling) `GET /api/health`                                       | API đã kiểm thử, chờ kiểm thử giao diện          |
+| 12      | Checkout (sổ địa chỉ, vận chuyển, COD/mô phỏng), lịch sử và chi tiết đơn, hủy đơn, đánh giá                                                                                       | API đã kiểm thử, chờ kiểm thử giao diện          |
+| 13      | Manager: dashboard, quản lý sản phẩm, ảnh/biến thể, danh mục; dọn file ảnh không dùng                                                                                             | Đã kiểm thử API và giao diện (Chromium headless) |
+| Mở rộng | Giao diện TV Studio; giỏ hàng, đặt hàng, đơn hàng, khu Manager/Admin trên React; biến thể màu/size, upload ảnh, sổ địa chỉ, đổi mật khẩu, dashboard, quản lý người dùng, cấu hình | Hoàn thành code, chờ kiểm thử trên máy           |
 
 ## Cách chạy
+
 1. Clone repo và cài thư viện:
    ```bash
    npm install
@@ -63,9 +66,11 @@
    ```
    Ảnh minh họa nằm ở `backend/public/samples`, phục vụ qua `http://localhost:3000/samples/...`.
 5. Chạy cả hai phần từ thư mục gốc:
+
    ```bash
    npm run dev
    ```
+
    Back-end: http://localhost:3000 | Front-end: http://localhost:5173
 
    Lần đầu sau khi cập nhật giao diện TV Studio phải chạy lại `npm install --prefix backend`
@@ -73,16 +78,18 @@
    Ảnh tải lên lưu ở `backend/uploads/products` (đã có trong `.gitignore`).
 
 ## Tài khoản mẫu (chỉ dùng trên máy phát triển)
-| Email | Vai trò | Mật khẩu |
-|---|---|---|
+
+| Email                  | Vai trò  | Mật khẩu |
+| ---------------------- | -------- | -------- |
 | customer01@example.com | CUSTOMER | Demo@123 |
 | customer02@example.com | CUSTOMER | Demo@123 |
-| manager01@example.com | MANAGER | Demo@123 |
-| admin01@example.com | ADMIN | Demo@123 |
+| manager01@example.com  | MANAGER  | Demo@123 |
+| admin01@example.com    | ADMIN    | Demo@123 |
 
 Seeder bị chặn khi `NODE_ENV=production`.
 
 ## Cấu trúc
+
 ```
 backend/
   database/        schema.sql, kiểm tra cấu trúc và ràng buộc
@@ -105,6 +112,7 @@ docs/              thiết kế CSDL, tài liệu API, kế hoạch, collection 
 ```
 
 ## Quy ước
+
 - Chỉ dùng Arrow Function; CommonJS ở back-end (`require`, `module.exports`).
 - Luồng module mới: Router -> Controller -> Service -> Model -> MySQL.
 - Response: `{ success: true, data }` hoặc `{ success: false, message }`.
