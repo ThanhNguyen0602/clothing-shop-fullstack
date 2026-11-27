@@ -5,7 +5,12 @@ const SORTS = Object.freeze({
   price_asc: "p.sale_price ASC, p.id ASC",
   price_desc: "p.sale_price DESC, p.id ASC",
   name_asc: "p.name ASC, p.id ASC",
-  name_desc: "p.name DESC, p.id ASC"
+  name_desc: "p.name DESC, p.id ASC",
+  // So luong ban trong don COMPLETED; chua ban thi xep theo moi nhat
+  best_selling: `(SELECT COALESCE(SUM(oi.quantity), 0) FROM order_items oi
+    JOIN orders o ON o.id = oi.order_id
+    WHERE oi.product_id = p.id AND o.order_status = 'COMPLETED') DESC,
+    p.created_at DESC, p.id DESC`,
 });
 
 const read = (query, key) => {
