@@ -15,7 +15,7 @@ const PRICE_RANGES = [
 ];
 
 const SORTS = [
-  ["newest", "Mới nhất"], ["price_asc", "Giá thấp đến cao"],
+  ["newest", "Mới nhất"], ["best_selling", "Bán chạy"], ["price_asc", "Giá thấp đến cao"],
   ["price_desc", "Giá cao đến thấp"], ["name_asc", "Tên A–Z"]
 ];
 

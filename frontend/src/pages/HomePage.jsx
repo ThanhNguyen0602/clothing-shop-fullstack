@@ -16,17 +16,21 @@ const services = [
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState(null);
+  const [bestSellers, setBestSellers] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const controller = new AbortController();
     Promise.all([
       listCategories(controller.signal),
-      listProducts({ limit: 8, sort: "newest" }, controller.signal)
+      listProducts({ limit: 8, sort: "newest" }, controller.signal),
+      // Buoi 11: 4 san pham ban chay nhat (con hang) cho khoi "Ban chay"
+      listProducts({ limit: 4, sort: "best_selling", inStock: "1" }, controller.signal)
     ])
-      .then(([categoryItems, productPage]) => {
+      .then(([categoryItems, productPage, bestPage]) => {
         setCategories(Array.isArray(categoryItems) ? categoryItems : []);
         setProducts(Array.isArray(productPage?.data) ? productPage.data : []);
+        setBestSellers(Array.isArray(bestPage?.data) ? bestPage.data : []);
       })
       .catch(() => {
         if (!controller.signal.aborted) {
@@ -71,6 +75,18 @@ const HomePage = () => {
                 <span>{category.name}</span>
               </Link>
             ))}
+          </div>
+        </section>
+      )}
+
+      {bestSellers.length > 0 && (
+        <section className="home-section" aria-labelledby="best-heading">
+          <div className="section-heading">
+            <h2 id="best-heading">Bán chạy</h2>
+            <Link to="/products?sort=best_selling">Xem tất cả</Link>
+          </div>
+          <div className="product-grid">
+            {bestSellers.map((product) => <ProductCard key={product.id} product={product} />)}
           </div>
         </section>
       )}
