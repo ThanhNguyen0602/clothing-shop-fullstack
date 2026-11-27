@@ -114,7 +114,7 @@ SELECT order_item_id, COUNT(*) AS occurrences FROM reviews GROUP BY order_item_i
 | `/products/12`, `/products/abc`, `/products/0` | Trang chi tiết (buổi 10 gọi API) / không tìm thấy | ☐ |
 | `/khong-co`, `/manager/khong-co` (đã đăng nhập Manager) | NotFound trong đúng layout | ☐ |
 | Back/Forward, F5 tại `/products/12` | Nội dung khớp URL | ☐ |
-| 375px / 768px / 960px / 1440px, zoom 200% | Không cuộn ngang; menu mobile mở/đóng, Escape đóng | ☐ |
+| 375px / 768px / 960px / 1440px, zoom 200% | Không cuộn ngang; menu mobile mở/đóng, Escape đóng | ✅ |
 | `npm run build` và `npm run preview -- --port 4173` | Build thành công, điều hướng được | ☐ |
 
 ## Buổi 09 – Xác thực và hồ sơ
@@ -248,3 +248,27 @@ Dữ liệu tạm đã xóa sau khi chạy. Các dòng ☐ chưa chạy trên gi
 | Thêm biến thể; trùng màu + size | Tồn kho = tổng biến thể; 409 | ✅ |
 | Xem ảnh upload qua địa chỉ Codespaces | Ảnh hiển thị | ☐ |
 | Sửa/xóa biến thể, đặt ảnh chính, sửa danh mục trên giao diện | Cập nhật ngay | ☐ |
+## Buổi 11 – Thanh: sản phẩm bán chạy, hiệu năng, responsive
+
+| Thao tác | Kỳ vọng | Thực tế |
+|---|---|---|
+| `GET /api/products?sort=best_selling&limit=4` | 200, đơn Hoàn thành xếp đầu | ✅ |
+| `GET /api/products?sort=abc` | 400 "Kiểu sắp xếp không hợp lệ" | ✅ |
+| Trang chủ có khối "Bán chạy", tắt backend thì báo lỗi | Hiện đúng | ✅ |
+| `/products` chọn Sắp xếp "Bán chạy" | URL có `sort=best_selling` | ✅ |
+
+Lighthouse (Mobile, chế độ dev):
+
+| Trang | Performance | LCP | CLS |
+|---|---|---|---|
+| `/` | ... | ... s | ... |
+| `/products` | ... | ... s | ... |
+| `/products/1` | ... | ... s | ... |
+
+Ảnh `/products`: tải dần khi cuộn ✅, tổng ... KB.
+
+| Màn hình | Kết quả | Ảnh chụp |
+|---|---|---|
+| 375px | ... | docs/screenshots/buoi11/375.png |
+| 768px | ... | docs/screenshots/buoi11/768.png |
+| 1440px | ... | docs/screenshots/buoi11/1440.png |
